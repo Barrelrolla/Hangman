@@ -16,6 +16,6 @@ var MenuState = {
 
     },
     gameStart: function (word) {
-        // game.state.start("GameState", true, false, word);
+        game.state.start("GameState", true, false, word);
     }
 };
