@@ -9,9 +9,8 @@ var MenuState = {
         for (var cat in categories) {
             var length = categories[cat].words.length;
             var rng = Math.floor((Math.random() * length));
-            console.log(rng);
             var button = this.game.add.button(0, coord, "button");
-            button.variable = categories[cat].words[rng].word;
+            button.variable = categories[cat].words[rng];
             button.inputEnabled = true;
             button.events.onInputDown.add(this.gameStart, this);
             this.game.add.text(0, coord, cat);

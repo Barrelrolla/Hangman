@@ -1,0 +1,8 @@
+- create a basic html and add js
+- add a json object that simulates db
+- add phaser and implement basic menu and game layout
+- add logic about picking cateogries/words
+- add logic about covering words
+- add logic about selecting letters (buttons on the screen or keyboard input?)
+- add logic about typing the whole word (input box in phaser?)
+- add statistics (cookies, localStorage, phaser.save()?)
