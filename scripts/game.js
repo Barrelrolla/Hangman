@@ -34,19 +34,19 @@ var GameState = {
 
         var words = selectedWord.word.split(" "),
             hiddenWords = [],
+            hiddenWord = [],            
             word,
-            hiddenWord = [],
             length;
 
         for (let i = 0; i < words.length; i++) {
             word = words[i].toUpperCase();
-            hiddenWord = [];
-            length = word.length;
+            length = word.length;            
+            hiddenWord = new Array(length).fill("_");
             hiddenWord[0] = word.charAt(0);
-            hiddenWord[length - 2] = word.charAt(length - 1);
-            hiddenWords.push(hiddenWord.join(" _ "));
+            hiddenWord[length - 1] = word.charAt(length - 1);
+            hiddenWords.push(hiddenWord.join(" "));
         }
-        game.add.text(0, 264, hiddenWords.join(" "));
+        game.add.text(0, 264, hiddenWords.join("   "));
         game.add.text(0, 300, selectedWord.description, { fontSize: 16 })
     }
 };
