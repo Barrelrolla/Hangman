@@ -3,7 +3,10 @@ var wordToSearch = "",
     checkedLetters = "",
     button,
     errors = 0,
-    displayedWord;
+    displayedWord,
+    description,
+    letter,
+    buttonText;
 
 var GameState = {
     preload: function () {
@@ -16,8 +19,8 @@ var GameState = {
         this.load.image("button", "assets/images/button.png");
 
     },
+
     create: function () {
-        stats.playedGames++;
         errors = 0;
         this.game.stage.backgroundColor = "#ffffff";
         this.game.add.text(0, 0, "Played Games: " + stats.playedGames, { fontSize: 15 });
@@ -28,14 +31,15 @@ var GameState = {
         this.game.input.keyboard.enabled = true;        
         this.game.input.keyboard.onDownCallback = function(e) {
             if (e.keyCode >= 65 && e.keyCode <= 90) {
-                var letter = String.fromCharCode(e.keyCode);
+                letter = String.fromCharCode(e.keyCode);
                 game.state.states.GameState.checkMatch(letter);
             }
         };
     },
-    update: function () {
 
+    update: function () {
     },
+
     init: function (selectedWord) {
         wordToSearch = selectedWord.word.toUpperCase();
 
@@ -49,6 +53,7 @@ var GameState = {
             if (i > 0) {
                 wordArray.push(" ");
             }
+
             word = words[i].toUpperCase();
             length = word.length;            
             hiddenWord = new Array(length).fill("_");
@@ -57,25 +62,30 @@ var GameState = {
             hiddenWord.forEach(char => {
                 wordArray.push(char);
             }, this);
+
             hiddenWords.push(hiddenWord.join(" "));
         }
+
         displayedWord = this.game.add.text(game.world.centerX, 264, wordArray.join(" "));
         displayedWord.anchor.x = 0.5;
-        var description = this.game.add.text(game.world.centerX, 300, selectedWord.description, { fontSize: 16 });
+        description = this.game.add.text(game.world.centerX, 300, selectedWord.description, { fontSize: 16 });
         description.anchor.x = 0.5;
     },
+
     addButton: function (text) {
         button = this.game.add.button(game.world.centerX, 200, "button", this.newGame);
         button.scale.setTo(0.5, 1);
         button.anchor.x = 0.5;
-        var buttonText = this.game.add.text(game.world.centerX, 205, text);
+        buttonText = this.game.add.text(game.world.centerX, 205, text);
         buttonText.anchor.x = 0.5;
         this.game.input.keyboard.enabled = false;
     },
+
     newGame: function () {
         wordArray = [];
         this.game.state.start("MenuState");
     },
+
     checkMatch: function (letter) {
         if (wordToSearch.indexOf(letter) >= 0) {
             var index = wordToSearch.indexOf(letter);
@@ -87,18 +97,23 @@ var GameState = {
             displayedWord.destroy();
             displayedWord = this.game.add.text(game.world.centerX, 264, wordArray.join(" "));
             displayedWord.anchor.x = 0.5;
+
             if (wordArray.indexOf("_") < 0) {
+                stats.playedGames++;
                 stats.wonGames++;
                 var win = this.game.add.text(game.world.centerX, 150, "YOU WIN!", { fontSize: 30, backgroundColor: "#ffffff" });
                 win.anchor.x = 0.5;
                 this.addButton("New Game");
             }
+
         } else {
             errors++;
             this.hangingMan.destroy();
             this.hangingMan = this.game.add.sprite(game.world.centerX, 0, "hangingMan" + errors);
             this.hangingMan.anchor.x = 0.5;
+
             if (errors == 5) {
+                stats.playedGames++;                
                 stats.lostGames++;
                 var lose = this.game.add.text(game.world.centerX, 150, "YOU LOSE!", { fontSize: 30, backgroundColor: "#ffffff" });
                 lose.anchor.x = 0.5;
@@ -107,7 +122,3 @@ var GameState = {
         }
     }
 };
-
-function checkForMatch(letter) {
-
-}
