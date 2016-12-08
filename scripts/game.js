@@ -65,7 +65,7 @@ var GameState = {
             hiddenWords.push(hiddenWord.join(" "));
         }
         displayedWord = this.game.add.text(0, 264, wordArray.join(" "));
-        game.add.text(0, 300, selectedWord.description, { fontSize: 16 })
+        this.game.add.text(0, 300, selectedWord.description, { fontSize: 16 });
     },
     addButton: function (text) {
         button = this.game.add.button(0, 200, "button", this.newGame);
