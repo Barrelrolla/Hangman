@@ -18,7 +18,8 @@ var GameState = {
     create: function () {
         errors = 0;
         this.game.stage.backgroundColor = "#ffffff";
-        this.hangingMan = this.game.add.sprite(0, 0, "hangingMan0");
+        this.hangingMan = this.game.add.sprite(game.world.centerX, 0, "hangingMan0");
+        this.hangingMan.anchor.x = 0.5;
         this.game.input.keyboard.enabled = true;        
         this.game.input.keyboard.onDownCallback = function(e) {
             if (e.keyCode >= 65 && e.keyCode <= 90) {
@@ -28,15 +29,21 @@ var GameState = {
         };
     },
     update: function () {
-        this.hangingMan = this.game.add.sprite(0, 0, "hangingMan" + errors);
+        this.hangingMan.destroy();
+        this.hangingMan = this.game.add.sprite(game.world.centerX, 0, "hangingMan" + errors);
+        this.hangingMan.anchor.x = 0.5;
         var button;
         if (errors == 5) {
+            var lose = this.game.add.text(game.world.centerX, 150, "YOU LOSE!", { fontSize: 30, backgroundColor: "#ffffff" });
+            lose.anchor.x = 0.5;
             this.addButton("New Game");
         }
         displayedWord.destroy();
-        displayedWord = this.game.add.text(0, 264, wordArray.join(" "));
+        displayedWord = this.game.add.text(game.world.centerX, 264, wordArray.join(" "));
+        displayedWord.anchor.x = 0.5;
         if (wordArray.indexOf("_") < 0) {
-            this.game.add.text(0, 150, "YOU WIN!", { fontSize: 30 });
+            var win = this.game.add.text(game.world.centerX, 150, "YOU WIN!", { fontSize: 30, backgroundColor: "#ffffff" });
+            win.anchor.x = 0.5;
             this.addButton("New Game");
         }
 
@@ -64,13 +71,17 @@ var GameState = {
             }, this);
             hiddenWords.push(hiddenWord.join(" "));
         }
-        displayedWord = this.game.add.text(0, 264, wordArray.join(" "));
-        this.game.add.text(0, 300, selectedWord.description, { fontSize: 16 });
+        displayedWord = this.game.add.text(game.world.centerX, 264, wordArray.join(" "));
+        displayedWord.anchor.x = 0.5;
+        var description = this.game.add.text(game.world.centerX, 300, selectedWord.description, { fontSize: 16 });
+        description.anchor.x = 0.5;
     },
     addButton: function (text) {
-        button = this.game.add.button(0, 200, "button", this.newGame);
+        button = this.game.add.button(game.world.centerX, 200, "button", this.newGame);
         button.scale.setTo(0.5, 1);
-        this.game.add.text(0, 200, text);
+        button.anchor.x = 0.5;
+        var buttonText = this.game.add.text(game.world.centerX, 205, text);
+        buttonText.anchor.x = 0.5;
         this.game.input.keyboard.enabled = false;
     },
     newGame: function () {
