@@ -22,6 +22,6 @@ var MenuState = {
     },
     gameStart: function (button) {
         var word = button.variable;
-        game.state.start("GameState", true, false, word);
+        this.game.state.start("GameState", true, false, word);
     }
 };
