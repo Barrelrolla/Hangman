@@ -19,6 +19,7 @@ var GameState = {
         errors = 0;
         this.game.stage.backgroundColor = "#ffffff";
         this.hangingMan = this.game.add.sprite(0, 0, "hangingMan0");
+        this.game.input.keyboard.enabled = true;        
         this.game.input.keyboard.onDownCallback = function(e) {
             if (e.keyCode >= 65 && e.keyCode <= 90) {
                 var letter = String.fromCharCode(e.keyCode);
@@ -28,17 +29,15 @@ var GameState = {
     },
     update: function () {
         this.hangingMan = this.game.add.sprite(0, 0, "hangingMan" + errors);
-        if (errors > 5) {
-            this.game.destroy();
-            location.reload();
+        var button;
+        if (errors == 5) {
+            this.addButton("New Game");
         }
         displayedWord.destroy();
         displayedWord = this.game.add.text(0, 264, wordArray.join(" "));
         if (wordArray.indexOf("_") < 0) {
             this.game.add.text(0, 150, "YOU WIN!", { fontSize: 30 });
-            var button = this.game.add.button(0, 200, "button", this.newGame);
-            button.scale.setTo(0.5, 1);
-            this.game.add.text(0, 200, "New Game");
+            this.addButton("New Game");
         }
 
     },
@@ -63,11 +62,16 @@ var GameState = {
             hiddenWord.forEach(char => {
                 wordArray.push(char);
             }, this);
-            console.log(wordArray);
             hiddenWords.push(hiddenWord.join(" "));
         }
         displayedWord = this.game.add.text(0, 264, wordArray.join(" "));
         game.add.text(0, 300, selectedWord.description, { fontSize: 16 })
+    },
+    addButton: function (text) {
+        button = this.game.add.button(0, 200, "button", this.newGame);
+        button.scale.setTo(0.5, 1);
+        this.game.add.text(0, 200, text);
+        this.game.input.keyboard.enabled = false;
     },
     newGame: function () {
         wordArray = [];
@@ -82,9 +86,7 @@ function checkForMatch(letter) {
             wordArray[index] = wordToSearch.charAt(index);
             index = wordToSearch.indexOf(letter, index + 1);
         }
-        console.log("Евала, намери буква");
     } else {
-        console.log("Кор");
         errors++;
     }
 }
