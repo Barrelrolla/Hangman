@@ -1,8 +1,9 @@
-var wordToSearch = "";
-var wordArray = [];
-var checkedLetters = "";
-var errors = 0;
-var displayedWord;
+var wordToSearch = "",
+    wordArray = [],
+    checkedLetters = "",
+    button,
+    errors = 0,
+    displayedWord;
 
 var GameState = {
     preload: function () {
@@ -20,38 +21,20 @@ var GameState = {
         errors = 0;
         this.game.stage.backgroundColor = "#ffffff";
         this.game.add.text(0, 0, "Played Games: " + stats.playedGames, { fontSize: 15 });
-        // this.game.add.text(0, 20, "Won Games: " + stats.wonGames, { fontSize: 15 });
-        // this.game.add.text(0, 40, "Lost Games: " + stats.lostGames, { fontSize: 15 });
+        this.game.add.text(0, 20, "Won Games: " + stats.wonGames, { fontSize: 15 });
+        this.game.add.text(0, 40, "Lost Games: " + stats.lostGames, { fontSize: 15 });
         this.hangingMan = this.game.add.sprite(game.world.centerX, 0, "hangingMan0");
         this.hangingMan.anchor.x = 0.5;
         this.game.input.keyboard.enabled = true;        
         this.game.input.keyboard.onDownCallback = function(e) {
             if (e.keyCode >= 65 && e.keyCode <= 90) {
                 var letter = String.fromCharCode(e.keyCode);
-                checkForMatch(letter);
+                game.state.states.GameState.checkMatch(letter);
             }
         };
     },
     update: function () {
-        this.hangingMan.destroy();
-        this.hangingMan = this.game.add.sprite(game.world.centerX, 0, "hangingMan" + errors);
-        this.hangingMan.anchor.x = 0.5;
-        var button;
-        if (errors == 5) {
-            // stats.lostGames++;
-            var lose = this.game.add.text(game.world.centerX, 150, "YOU LOSE!", { fontSize: 30, backgroundColor: "#ffffff" });
-            lose.anchor.x = 0.5;
-            this.addButton("New Game");
-        }
-        displayedWord.destroy();
-        displayedWord = this.game.add.text(game.world.centerX, 264, wordArray.join(" "));
-        displayedWord.anchor.x = 0.5;
-        if (wordArray.indexOf("_") < 0) {
-            // stats.wonGames++;
-            var win = this.game.add.text(game.world.centerX, 150, "YOU WIN!", { fontSize: 30, backgroundColor: "#ffffff" });
-            win.anchor.x = 0.5;
-            this.addButton("New Game");
-        }
+
     },
     init: function (selectedWord) {
         wordToSearch = selectedWord.word.toUpperCase();
@@ -92,17 +75,39 @@ var GameState = {
     newGame: function () {
         wordArray = [];
         this.game.state.start("MenuState");
+    },
+    checkMatch: function (letter) {
+        if (wordToSearch.indexOf(letter) >= 0) {
+            var index = wordToSearch.indexOf(letter);
+            while (index >= 0) {            
+                wordArray[index] = wordToSearch.charAt(index);
+                index = wordToSearch.indexOf(letter, index + 1);
+            }
+            
+            displayedWord.destroy();
+            displayedWord = this.game.add.text(game.world.centerX, 264, wordArray.join(" "));
+            displayedWord.anchor.x = 0.5;
+            if (wordArray.indexOf("_") < 0) {
+                stats.wonGames++;
+                var win = this.game.add.text(game.world.centerX, 150, "YOU WIN!", { fontSize: 30, backgroundColor: "#ffffff" });
+                win.anchor.x = 0.5;
+                this.addButton("New Game");
+            }
+        } else {
+            errors++;
+            this.hangingMan.destroy();
+            this.hangingMan = this.game.add.sprite(game.world.centerX, 0, "hangingMan" + errors);
+            this.hangingMan.anchor.x = 0.5;
+            if (errors == 5) {
+                stats.lostGames++;
+                var lose = this.game.add.text(game.world.centerX, 150, "YOU LOSE!", { fontSize: 30, backgroundColor: "#ffffff" });
+                lose.anchor.x = 0.5;
+                this.addButton("New Game");
+            }
+        }
     }
 };
 
 function checkForMatch(letter) {
-    if (wordToSearch.indexOf(letter) >= 0) {
-        var index = wordToSearch.indexOf(letter);
-        while (index >= 0) {            
-            wordArray[index] = wordToSearch.charAt(index);
-            index = wordToSearch.indexOf(letter, index + 1);
-        }
-    } else {
-        errors++;
-    }
+
 }
