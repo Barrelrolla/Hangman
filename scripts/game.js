@@ -6,7 +6,14 @@ var wordToSearch = "",
     displayedWord,
     description,
     letter,
-    buttonText;
+    buttonText,
+    message,
+    lettersStat,
+    guessedLetters,
+    triedLetters,
+    wrongLetters;
+
+// TODO: Implement whole word guessing
 
 var GameState = {
     preload: function () {
@@ -22,10 +29,16 @@ var GameState = {
 
     create: function () {
         errors = 0;
+        triedLetters = "";
+        wrongLetters = "";
         this.game.stage.backgroundColor = "#ffffff";
         this.game.add.text(0, 0, "Played Games: " + stats.playedGames, { fontSize: 15 });
         this.game.add.text(0, 20, "Won Games: " + stats.wonGames, { fontSize: 15 });
         this.game.add.text(0, 40, "Lost Games: " + stats.lostGames, { fontSize: 15 });
+        lettersStat = this.game.add.text(0, 60, "Guessed Letters: " + stats.guessedLetters, { fontSize: 15 });
+        guessedLetters = this.game.add.text(0, 200, "Wrong Letters: " + wrongLetters, { fontSize: 15 });
+        message = this.game.add.text();
+        message.anchor.x = 0.5;
         this.hangingMan = this.game.add.sprite(game.world.centerX, 0, "hangingMan0");
         this.hangingMan.anchor.x = 0.5;
         this.game.input.keyboard.enabled = true;        
@@ -87,37 +100,55 @@ var GameState = {
     },
 
     checkMatch: function (letter) {
-        if (wordToSearch.indexOf(letter) >= 0) {
-            var index = wordToSearch.indexOf(letter);
-            while (index >= 0) {            
-                wordArray[index] = wordToSearch.charAt(index);
-                index = wordToSearch.indexOf(letter, index + 1);
-            }
-            
-            displayedWord.destroy();
-            displayedWord = this.game.add.text(game.world.centerX, 264, wordArray.join(" "));
-            displayedWord.anchor.x = 0.5;
-
-            if (wordArray.indexOf("_") < 0) {
-                stats.playedGames++;
-                stats.wonGames++;
-                var win = this.game.add.text(game.world.centerX, 150, "YOU WIN!", { fontSize: 30, backgroundColor: "#ffffff" });
-                win.anchor.x = 0.5;
-                this.addButton("New Game");
-            }
-
+        if (triedLetters.indexOf(letter) >= 0) {
+            message.destroy();            
+            message = this.game.add.text(game.world.centerX, 240, "You already tried this letter", { fontSize: 15 });
+            message.anchor.x = 0.5;            
+            this.game.time.events.add(3000, function() {
+                message.destroy();
+            });
         } else {
-            errors++;
-            this.hangingMan.destroy();
-            this.hangingMan = this.game.add.sprite(game.world.centerX, 0, "hangingMan" + errors);
-            this.hangingMan.anchor.x = 0.5;
+            triedLetters += letter;
 
-            if (errors == 5) {
-                stats.playedGames++;                
-                stats.lostGames++;
-                var lose = this.game.add.text(game.world.centerX, 150, "YOU LOSE!", { fontSize: 30, backgroundColor: "#ffffff" });
-                lose.anchor.x = 0.5;
-                this.addButton("New Game");
+            if (wordToSearch.indexOf(letter) >= 0) {
+                var index = wordToSearch.indexOf(letter);
+                while (index >= 0) {            
+                    wordArray[index] = wordToSearch.charAt(index);
+                    index = wordToSearch.indexOf(letter, index + 1);
+                }
+
+                stats.guessedLetters++;
+                lettersStat.destroy();
+                lettersStat = this.game.add.text(0, 60, "Guessed Letters: " + stats.guessedLetters, { fontSize: 15}); 
+                
+                displayedWord.destroy();
+                displayedWord = this.game.add.text(game.world.centerX, 264, wordArray.join(" "));
+                displayedWord.anchor.x = 0.5;
+
+                if (wordArray.indexOf("_") < 0) {
+                    stats.playedGames++;
+                    stats.wonGames++;
+                    var win = this.game.add.text(game.world.centerX, 150, "YOU WIN!", { fontSize: 30, backgroundColor: "#ffffff" });
+                    win.anchor.x = 0.5;
+                    this.addButton("New Game");
+                }
+
+            } else {
+                errors++;
+                wrongLetters += letter;
+                guessedLetters.destroy();
+                guessedLetters = this.game.add.text(0, 200, "Wrong Letters: " + wrongLetters, { fontSize: 15 });
+                this.hangingMan.destroy();
+                this.hangingMan = this.game.add.sprite(game.world.centerX, 0, "hangingMan" + errors);
+                this.hangingMan.anchor.x = 0.5;
+
+                if (errors == 5) {
+                    stats.playedGames++;                
+                    stats.lostGames++;
+                    var lose = this.game.add.text(game.world.centerX, 150, "YOU LOSE!", { fontSize: 30, backgroundColor: "#ffffff" });
+                    lose.anchor.x = 0.5;
+                    this.addButton("New Game");
+                }
             }
         }
     }
