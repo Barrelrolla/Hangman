@@ -13,7 +13,7 @@ var wordToSearch = "",
     triedLetters,
     wrongLetters;
 
-// TODO: refactor by removing code repetition and renaming variables
+// TODO: refactor by removing code repetition, renaming variables and introducing constants
 
 var GameState = {
     preload: function () {
