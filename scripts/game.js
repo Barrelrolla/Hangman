@@ -13,7 +13,7 @@ var wordToSearch = "",
     triedLetters,
     wrongLetters;
 
-// TODO: Implement whole word guessing
+// TODO: refactor by removing code repetition and renaming variables
 
 var GameState = {
     preload: function () {
@@ -43,15 +43,25 @@ var GameState = {
             input.setAttribute("id", "wordInput");            
             container.appendChild(input);
             input.focus();
-            //button.onDownCallback.enabled = false;
             game.input.keyboard.onDownCallback = function(e) {
                 if (e.keyCode == 13) {
                     var input = document.getElementById("wordInput");
                     var word = input.value;
+                    input.remove();
+
                     if (word.toUpperCase() == wordToSearch) {
-                        console.log("you win");
+                        stats.guessedWords++;
+                        stats.playedGames++;
+                        stats.wonGames++;
+                        var win = this.game.add.text(game.world.centerX, 150, "YOU WIN!", { fontSize: 30, backgroundColor: "#ffffff" });
+                        win.anchor.x = 0.5;
+                        game.state.states.GameState.addButton("New Game");
                     } else {
-                        console.log("you lose");
+                        stats.playedGames++;                
+                        stats.lostGames++;
+                        var lose = this.game.add.text(game.world.centerX, 150, "YOU LOSE!", { fontSize: 30, backgroundColor: "#ffffff" });
+                        lose.anchor.x = 0.5;
+                        game.state.states.GameState.addButton("New Game");
                     }
                 }
             } ;
@@ -61,6 +71,7 @@ var GameState = {
         buttonText =  this.game.add.text(550, 45, "Guess word");
         buttonText.anchor.x = 0.5;
         lettersStat = this.game.add.text(0, 60, "Guessed Letters: " + stats.guessedLetters, { fontSize: 15 });
+        lettersStat = this.game.add.text(0, 80, "Guessed Words: " + stats.guessedWords, { fontSize: 15 });
         guessedLetters = this.game.add.text(0, 200, "Wrong Letters: " + wrongLetters, { fontSize: 15 });
         message = this.game.add.text();
         message.anchor.x = 0.5;
