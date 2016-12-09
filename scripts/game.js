@@ -36,6 +36,30 @@ var GameState = {
         this.game.add.text(0, 0, "Played Games: " + stats.playedGames, { fontSize: 15 });
         this.game.add.text(0, 20, "Won Games: " + stats.wonGames, { fontSize: 15 });
         this.game.add.text(0, 40, "Lost Games: " + stats.lostGames, { fontSize: 15 });
+        button = this.game.add.button(550, 40, "button", function() {
+            var container = document.getElementById("container");
+            var input = document.createElement("input");
+            input.setAttribute("type", "text");
+            input.setAttribute("id", "wordInput");            
+            container.appendChild(input);
+            input.focus();
+            //button.onDownCallback.enabled = false;
+            game.input.keyboard.onDownCallback = function(e) {
+                if (e.keyCode == 13) {
+                    var input = document.getElementById("wordInput");
+                    var word = input.value;
+                    if (word.toUpperCase() == wordToSearch) {
+                        console.log("you win");
+                    } else {
+                        console.log("you lose");
+                    }
+                }
+            } ;
+        });
+        button.scale.setTo(0.6, 1);
+        button.anchor.x = 0.5;
+        buttonText =  this.game.add.text(550, 45, "Guess word");
+        buttonText.anchor.x = 0.5;
         lettersStat = this.game.add.text(0, 60, "Guessed Letters: " + stats.guessedLetters, { fontSize: 15 });
         guessedLetters = this.game.add.text(0, 200, "Wrong Letters: " + wrongLetters, { fontSize: 15 });
         message = this.game.add.text();
