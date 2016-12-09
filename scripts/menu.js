@@ -18,7 +18,7 @@ var MenuState = {
             button.variable = categories[cat].words[rng];
             button.inputEnabled = true;
             button.events.onInputDown.add(this.gameStart, this);
-            text = this.game.add.text(game.world.centerX, coord + 5, cat);
+            text = this.game.add.text(game.world.centerX, coord + 5, categories[cat].name);
             text.anchor.x = 0.5;
             coord += 50;
         }

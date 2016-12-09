@@ -9,6 +9,10 @@ var categories = {
             {
                 "word": "Terminator",
                 "description": "An 80s action movie set in the future"
+            },
+            {
+                "word": "Memento",
+                "description": "A movie that kinda runs backwards"
             }
         ]
     },
@@ -22,6 +26,10 @@ var categories = {
             {
                 "word": "Elephant",
                 "description": "The biggest land animal"
+            },
+            {
+                "word": "Tasmanian Devil",
+                "description": "Taz"
             }
         ]
     },
@@ -35,7 +43,28 @@ var categories = {
             {
                 "word": "Destiny",
                 "description": "An FPSMMO made by Bungie"
-            }
+            },
+            // {
+            //     "word": "Counter Strike",
+            //     "description": "One of the largest e-sports"
+            // }
         ]
-    }
+    },
+    // "food": {
+    //     "name": "Food",        
+    //     "words": [
+    //         {
+    //             "word": "Baked beans",
+    //             "description": "Dish with something like seeds"
+    //         },
+    //         {
+    //             "word": "Spaghetti",
+    //             "description": "Italian food"
+    //         },
+    //         {
+    //             "word": "White rice",
+    //             "description": "Very popular food in the East"
+    //         }
+    //     ]
+    // }
 };
