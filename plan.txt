@@ -1,8 +1,11 @@
 - create a basic html and add js
 - add a json object that simulates db
 - add phaser and implement basic menu and game layout
-- add logic about picking cateogries/words
+- add logic about picking categories/words
+    - should work with any number of categories/words
 - add logic about covering words
+    - should work no matter of how many words the conundrum is
 - add logic about selecting letters (buttons on the screen or keyboard input?)
+    - so far only keyboard input, will add buttons if I have the time (figure out how to do it without code duplication)
 - add logic about typing the whole word (input box in phaser?)
 - add statistics (cookies, localStorage, phaser.save()?)
