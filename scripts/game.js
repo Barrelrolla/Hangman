@@ -71,7 +71,7 @@ var GameState = {
         buttonText =  this.game.add.text(550, 45, "Guess word");
         buttonText.anchor.x = 0.5;
         lettersStat = this.game.add.text(0, 60, "Guessed Letters: " + stats.guessedLetters, { fontSize: 15 });
-        lettersStat = this.game.add.text(0, 80, "Guessed Words: " + stats.guessedWords, { fontSize: 15 });
+        this.game.add.text(0, 80, "Guessed Words: " + stats.guessedWords, { fontSize: 15 });
         guessedLetters = this.game.add.text(0, 200, "Wrong Letters: " + wrongLetters, { fontSize: 15 });
         message = this.game.add.text();
         message.anchor.x = 0.5;
