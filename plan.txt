@@ -9,3 +9,4 @@
     - so far only keyboard input, will add buttons if I have the time (figure out how to do it without code duplication)
 - add logic about typing the whole word (input box in phaser?)
 - add statistics (cookies, localStorage, phaser.save()?)
+    - implemented using localStorage

@@ -31,6 +31,7 @@ var GameState = {
         errors = 0;
         triedLetters = "";
         wrongLetters = "";
+        stats = JSON.parse(localStorage.getItem("stats")) || stats;
         this.game.stage.backgroundColor = "#ffffff";
         this.game.add.text(0, 0, "Played Games: " + stats.playedGames, { fontSize: 15 });
         this.game.add.text(0, 20, "Won Games: " + stats.wonGames, { fontSize: 15 });
@@ -96,6 +97,7 @@ var GameState = {
 
     newGame: function () {
         wordArray = [];
+        localStorage.setItem("stats", JSON.stringify(stats));
         this.game.state.start("MenuState");
     },
 
