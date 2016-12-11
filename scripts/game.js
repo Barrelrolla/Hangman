@@ -1,4 +1,5 @@
 var alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"],
+    alphabetButtonArray,
     wordToSearch = "",
     wordArray = [],
     checkedLetters = "",
@@ -6,6 +7,7 @@ var alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
     errors = 0,
     displayedWord,
     description,
+    descriptionWord,
     letter,
     buttonText,
     message,
@@ -32,6 +34,7 @@ var GameState = {
         errors = 0;
         triedLetters = "";
         wrongLetters = "";
+        alphabetButtonArray = [];
         stats = JSON.parse(localStorage.getItem(constants.localStorageStatsName)) || stats;
         this.game.stage.backgroundColor = constants.whiteColor;
         this.game.add.text(0, 0, constants.playedGamesText + stats.playedGames, { fontSize: constants.smallText });
@@ -93,7 +96,13 @@ var GameState = {
                 letter = String.fromCharCode(e.keyCode);
                 game.state.states.GameState.checkMatch(letter);
             }
-        };
+        };        
+
+        displayedWord = this.game.add.text(game.world.centerX, constants.displayedWordCoordinate, wordArray.join(" "));
+        displayedWord.anchor.x = 0.5;
+        description = this.game.add.text(game.world.centerX, constants.descriptionCoordinate, descriptionWord, { fontSize: constants.smallText });
+        description.anchor.x = 0.5;
+        this.addAlphabet();
     },
 
     update: function () {
@@ -101,9 +110,9 @@ var GameState = {
 
     init: function (selectedWord) {
         wordToSearch = selectedWord.word.toUpperCase();
+        descriptionWord = selectedWord.description;
 
         var words = selectedWord.word.split(" "),
-            hiddenWords = [],
             hiddenWord = [],
             word,
             length;
@@ -121,14 +130,32 @@ var GameState = {
             hiddenWord.forEach(char => {
                 wordArray.push(char);
             }, this);
-
-            hiddenWords.push(hiddenWord.join(" "));
         }
+    },
 
-        displayedWord = this.game.add.text(game.world.centerX, constants.displayedWordCoordinate, wordArray.join(" "));
-        displayedWord.anchor.x = 0.5;
-        description = this.game.add.text(game.world.centerX, constants.descriptionCoordinate, selectedWord.description, { fontSize: constants.smallText });
-        description.anchor.x = 0.5;
+    addAlphabet: function () {
+        var x = 480;
+        var y = 120;
+        for (var i = 0; i < alphabet.length; i++) {
+            var letter = alphabet[i]
+            button = this.game.add.button(x, y, constants.buttonImageName, function (e) {
+                this.scale.setTo(0.05, -0.5)
+                var letter = alphabetButtonArray.indexOf(this);
+                game.state.states.GameState.checkMatch(alphabet[letter]);                
+            });
+            button.anchor.x = 0.5;
+            button.anchor.y = 0.5;
+            button.scale.setTo(0.05, 0.5);
+            alphabetButtonArray.push(button);
+            buttonText = this.game.add.text(x, y + 4, alphabet[i], { fontSize:constants.smallText });
+            buttonText.anchor.x = 0.5;
+            buttonText.anchor.y = 0.5;
+            x += 30;
+            if (i % 5 === 0 && i > 0) {
+                y += 30;
+                x = 480;
+            }
+        }
     },
 
     addButton: function (text) {
