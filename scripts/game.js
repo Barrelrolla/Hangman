@@ -43,44 +43,7 @@ var GameState = {
         this.game.add.text(0, constants.wonGamesCoordinate, constants.wonGamesText + stats.wonGames, { fontSize: constants.smallText });
         this.game.add.text(0, constants.lostGamesCoordinate, constants.lostGamesText + stats.lostGames, { fontSize: constants.smallText });
         guessButton = this.game.add.button(constants.guessWordX, constants.guessWordY, constants.buttonImageName, function () {
-            game.state.states.GameState.destroyGuessButton();
-            game.state.states.GameState.destroyAlphabetButtons();            
-            var container = document.getElementById("container");
-            var input = document.createElement("input");
-            input.setAttribute("type", "text");
-            input.setAttribute("id", "wordInput");
-            container.appendChild(input);
-            input.focus();
-            game.input.keyboard.onDownCallback = function (e) {
-                if (e.keyCode == constants.enterKey) {
-                    var input = document.getElementById("wordInput");
-                    var word = input.value;
-                    input.remove();
-
-                    if (word.toUpperCase() == wordToSearch) {
-                        stats.guessedWords++;
-                        stats.playedGames++;
-                        stats.wonGames++;
-                        game.state.states.GameState.revealWord();
-
-                        var win = this.game.add.text(game.world.centerX, constants.resultTextCoordinate, constants.youWinText, {
-                            fontSize: constants.bigText, backgroundColor: constants.whiteColor
-                        });
-
-                        win.anchor.x = 0.5;
-                        game.state.states.GameState.addButton(constants.newGameText);
-                    } else {
-                        stats.playedGames++;
-                        stats.lostGames++;
-                        var lose = this.game.add.text(game.world.centerX, constants.resultTextCoordinate, constants.youLoseText, {
-                            fontSize: constants.bigText, backgroundColor: constants.whiteColor
-                        });
-
-                        lose.anchor.x = 0.5;
-                        game.state.states.GameState.addButton(constants.newGameText);
-                    }
-                }
-            };
+            game.state.states.GameState.guessButtonFunction();
         });
         guessButton.scale.setTo(0.6, 1);
         guessButton.anchor.x = 0.5;
@@ -99,7 +62,7 @@ var GameState = {
                 letter = String.fromCharCode(e.keyCode);
                 game.state.states.GameState.checkMatch(letter);
             }
-        };        
+        };
 
         displayedWord = this.game.add.text(game.world.centerX, constants.displayedWordCoordinate, wordArray.join(" "));
         displayedWord.anchor.x = 0.5;
@@ -136,39 +99,84 @@ var GameState = {
         }
     },
 
+    guessButtonFunction: function () {
+        game.state.states.GameState.destroyGuessButton();
+        game.state.states.GameState.destroyAlphabetButtons();
+        var container = document.getElementById("container");
+        var input = document.createElement("input");
+        input.setAttribute("type", "text");
+        input.setAttribute("id", "wordInput");
+        container.appendChild(input);
+        input.focus();
+        game.input.keyboard.onDownCallback = function (e) {
+            if (e.keyCode == constants.enterKey) {
+                var input = document.getElementById("wordInput");
+                var word = input.value;
+                input.remove();
+
+                if (word.toUpperCase() == wordToSearch) {
+                    stats.guessedWords++;
+                    stats.playedGames++;
+                    stats.wonGames++;
+                    game.state.states.GameState.revealWord();
+
+                    var win = this.game.add.text(game.world.centerX, constants.resultTextCoordinate, constants.youWinText, {
+                        fontSize: constants.bigText, backgroundColor: constants.whiteColor
+                    });
+
+                    win.anchor.x = 0.5;
+                    game.state.states.GameState.addNewGameButton(constants.newGameText);
+                } else {
+                    stats.playedGames++;
+                    stats.lostGames++;
+                    var lose = this.game.add.text(game.world.centerX, constants.resultTextCoordinate, constants.youLoseText, {
+                        fontSize: constants.bigText, backgroundColor: constants.whiteColor
+                    });
+
+                    lose.anchor.x = 0.5;
+                    game.state.states.GameState.addNewGameButton(constants.newGameText);
+                }
+            }
+        };
+    },
+
     addAlphabet: function () {
-        var x = 480;
-        var y = 120;
+        var x = constants.alphabetButtonsX;
+        var y = constants.alphabetButtonsY;
         for (var i = 0; i < alphabet.length; i++) {
             var letter = alphabet[i]
             button = this.game.add.button(x, y, constants.buttonImageName, function (e) {
                 this.scale.setTo(0.05, -0.5)
                 var letter = alphabetButtonArray.indexOf(this);
-                game.state.states.GameState.checkMatch(alphabet[letter]);                
+                game.state.states.GameState.checkMatch(alphabet[letter]);
             });
             button.anchor.x = 0.5;
             button.anchor.y = 0.5;
             button.scale.setTo(0.05, 0.5);
             alphabetButtonArray.push(button);
-            buttonText = this.game.add.text(x, y + 4, alphabet[i], { fontSize:constants.smallText });
+            buttonText = this.game.add.text(x, y + constants.alphabetButtonTextModifier, alphabet[i], { fontSize: constants.smallText });
             buttonText.anchor.x = 0.5;
             buttonText.anchor.y = 0.5;
             alphabetTextArray.push(buttonText)
-            x += 30;
-            if (i % 5 === 0 && i > 0) {
-                y += 30;
-                x = 480;
+            x += constants.alphabetButtonModifier;
+            if (i % constants.alphabetRowModifier === 0 && i > 0) {
+                y += constants.alphabetButtonModifier;
+                x = constants.alphabetButtonsX;
             }
         }
     },
 
-    addButton: function (text) {
+    addNewGameButton: function (text) {
         button = this.game.add.button(game.world.centerX, constants.newGameButtonCoordinate, constants.buttonImageName, this.newGame);
         button.scale.setTo(0.5, 1);
         button.anchor.x = 0.5;
         buttonText = this.game.add.text(game.world.centerX, constants.newGameButtonCoordinate + constants.buttonTextModifier, text);
         buttonText.anchor.x = 0.5;
-        this.game.input.keyboard.enabled = false;
+        this.game.input.keyboard.onDownCallback = function (e) {
+            if (e.keyCode == constants.enterKey) {
+                game.state.states.GameState.newGame();
+            }
+        };
     },
 
     newGame: function () {
@@ -199,7 +207,7 @@ var GameState = {
         this.updateWord();
     },
 
-    updateWord: function() {
+    updateWord: function () {
         displayedWord.destroy();
         displayedWord = this.game.add.text(game.world.centerX, constants.displayedWordCoordinate, wordArray.join(" "));
         displayedWord.anchor.x = 0.5;
@@ -239,7 +247,7 @@ var GameState = {
                         fontSize: constants.bigText, backgroundColor: constants.whiteColor
                     });
                     win.anchor.x = 0.5;
-                    this.addButton(constants.newGameText);
+                    this.addNewGameButton(constants.newGameText);
                 }
 
             } else {
@@ -255,13 +263,13 @@ var GameState = {
                     stats.playedGames++;
                     stats.lostGames++;
                     game.state.states.GameState.destroyGuessButton();
-                    game.state.states.GameState.destroyAlphabetButtons();                    
+                    game.state.states.GameState.destroyAlphabetButtons();
 
                     var lose = this.game.add.text(game.world.centerX, constants.resultTextCoordinate, constants.youLoseText, {
                         fontSize: constants.bigText, backgroundColor: constants.whiteColor
                     });
                     lose.anchor.x = 0.5;
-                    this.addButton(constants.newGameText);
+                    this.addNewGameButton(constants.newGameText);
                 }
             }
         }

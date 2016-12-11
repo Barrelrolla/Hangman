@@ -39,5 +39,10 @@ var constants = {
     maxErrors: 5,
     messageCoordinates: 240,
     messageTimerTime: 3000,
-    triedLetterMessage: "You already tried this letter"
+    triedLetterMessage: "You already tried this letter",
+    alphabetButtonsX: 480,
+    alphabetButtonsY: 120,
+    alphabetButtonModifier: 30,
+    alphabetButtonTextModifier: 4,
+    alphabetRowModifier: 5
 }
