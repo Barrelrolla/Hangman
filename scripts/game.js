@@ -1,5 +1,6 @@
 var alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"],
     alphabetButtonArray,
+    alphabetTextArray,
     wordToSearch = "",
     wordArray = [],
     checkedLetters = "",
@@ -35,6 +36,7 @@ var GameState = {
         triedLetters = "";
         wrongLetters = "";
         alphabetButtonArray = [];
+        alphabetTextArray = [];
         stats = JSON.parse(localStorage.getItem(constants.localStorageStatsName)) || stats;
         this.game.stage.backgroundColor = constants.whiteColor;
         this.game.add.text(0, 0, constants.playedGamesText + stats.playedGames, { fontSize: constants.smallText });
@@ -42,6 +44,7 @@ var GameState = {
         this.game.add.text(0, constants.lostGamesCoordinate, constants.lostGamesText + stats.lostGames, { fontSize: constants.smallText });
         guessButton = this.game.add.button(constants.guessWordX, constants.guessWordY, constants.buttonImageName, function () {
             game.state.states.GameState.destroyGuessButton();
+            game.state.states.GameState.destroyAlphabetButtons();            
             var container = document.getElementById("container");
             var input = document.createElement("input");
             input.setAttribute("type", "text");
@@ -150,6 +153,7 @@ var GameState = {
             buttonText = this.game.add.text(x, y + 4, alphabet[i], { fontSize:constants.smallText });
             buttonText.anchor.x = 0.5;
             buttonText.anchor.y = 0.5;
+            alphabetTextArray.push(buttonText)
             x += 30;
             if (i % 5 === 0 && i > 0) {
                 y += 30;
@@ -176,6 +180,15 @@ var GameState = {
     destroyGuessButton: function () {
         guessButton.destroy();
         guessButtonText.destroy();
+    },
+
+    destroyAlphabetButtons: function () {
+        for (var i = 0; i < alphabetButtonArray.length; i++) {
+            // this removes the callback function intead of removing the buttons, but I don't like it
+            // alphabetButtonArray[i].onInputUp = alphabetButtonArray[i].onInputDown;
+            alphabetButtonArray[i].destroy();
+            alphabetTextArray[i].destroy();
+        }
     },
 
     revealWord: function () {
@@ -220,6 +233,7 @@ var GameState = {
                     stats.playedGames++;
                     stats.wonGames++;
                     game.state.states.GameState.destroyGuessButton();
+                    game.state.states.GameState.destroyAlphabetButtons();
 
                     var win = this.game.add.text(game.world.centerX, constants.resultTextCoordinate, constants.youWinText, {
                         fontSize: constants.bigText, backgroundColor: constants.whiteColor
@@ -241,6 +255,7 @@ var GameState = {
                     stats.playedGames++;
                     stats.lostGames++;
                     game.state.states.GameState.destroyGuessButton();
+                    game.state.states.GameState.destroyAlphabetButtons();                    
 
                     var lose = this.game.add.text(game.world.centerX, constants.resultTextCoordinate, constants.youLoseText, {
                         fontSize: constants.bigText, backgroundColor: constants.whiteColor
