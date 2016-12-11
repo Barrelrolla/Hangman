@@ -109,7 +109,7 @@ var GameState = {
         container.appendChild(input);
         input.focus();
         game.input.keyboard.onDownCallback = function (e) {
-            if (e.keyCode == constants.enterKey) {
+            if (e.keyCode == constants.enterKey || e.keyCode == constants.mobileEnterKey) {
                 var input = document.getElementById("wordInput");
                 var word = input.value;
                 input.remove();

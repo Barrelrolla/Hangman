@@ -34,6 +34,7 @@ var constants = {
     guessWordX: 550,
     guessWordY: 40,
     enterKey: 13,
+    mobileEnterKey: 9,
     aKey: 65,
     zKey: 90,
     maxErrors: 5,
