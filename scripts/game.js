@@ -81,6 +81,7 @@ var GameState = {
     },
 
     init: function (selectedWord) {
+        wordArray = [];        
         wordToSearch = selectedWord.word.toUpperCase();
         descriptionWord = selectedWord.description;
 
@@ -124,6 +125,7 @@ var GameState = {
                     stats.guessedWords++;
                     wordStat.destroy();
                     wordStat = this.game.add.text(0, constants.guessedWordsCoordinate, constants.guessedWordsText + stats.guessedWords, { fontSize: constants.smallText });
+                    game.state.states.GameState.revealWord();
                     game.state.states.GameState.winGame();
                 } else {
                     game.state.states.GameState.loseGame();
@@ -172,8 +174,6 @@ var GameState = {
     },
 
     newGame: function () {
-        wordArray = [];
-        localStorage.setItem(constants.localStorageStatsName, JSON.stringify(stats));
         this.game.state.start(constants.menuStateName);
     },
 
@@ -197,7 +197,9 @@ var GameState = {
         playedStat = this.game.add.text(0, 0, constants.playedGamesText + stats.playedGames, { fontSize: constants.smallText });
         stats.wonGames++;
         wonStat.destroy();
-        wonStat = this.game.add.text(0, constants.wonGamesCoordinate, constants.wonGamesText + stats.wonGames, { fontSize: constants.smallText });        
+        wonStat = this.game.add.text(0, constants.wonGamesCoordinate, constants.wonGamesText + stats.wonGames, { fontSize: constants.smallText });
+        localStorage.setItem(constants.localStorageStatsName, JSON.stringify(stats));
+
         this.destroyGuessButton();
         this.destroyAlphabetButtons();
         drawHappyFace();
@@ -216,6 +218,8 @@ var GameState = {
         stats.lostGames++;
         lostStat.destroy();
         lostStat = this.game.add.text(0, constants.lostGamesCoordinate, constants.lostGamesText + stats.lostGames, { fontSize: constants.smallText });
+        localStorage.setItem(constants.localStorageStatsName, JSON.stringify(stats));
+
         this.destroyGuessButton();
         this.destroyAlphabetButtons();
 

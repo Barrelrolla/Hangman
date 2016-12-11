@@ -11,8 +11,8 @@ var MenuState = {
         text = this.game.add.text(game.world.centerX, constants.menuCategoryCoordinate, constants.menuCategoriesName);
         text.anchor.x = 0.5;
         for (var cat in categories) {
-            var length = categories[cat].words.length;
-            var rng = Math.floor((Math.random() * length));
+            var wordCount = categories[cat].words.length;
+            var rng = Math.floor((Math.random() * wordCount));
             var button = this.game.add.button(game.world.centerX, coord, constants.buttonImageName);
             button.anchor.x = 0.5;
             button.variable = categories[cat].words[rng];
@@ -23,9 +23,10 @@ var MenuState = {
             coord += constants.buttonModifier;
         }
     },
-    update: function () {
 
+    update: function () {
     },
+    
     gameStart: function (button) {
         var word = button.variable;
         this.game.state.start(constants.gameStateName, true, false, word);
