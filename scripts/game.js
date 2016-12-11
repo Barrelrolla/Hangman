@@ -204,6 +204,10 @@ var GameState = {
         this.destroyGuessButton();
         this.destroyAlphabetButtons();
 
+        for (errors ; errors <= constants.maxErrors; errors++) {
+            drawArray[errors]();            
+        }
+
         var lose = this.game.add.text(game.world.centerX, constants.resultTextCoordinate, constants.youLoseText, {
             fontSize: constants.bigText, backgroundColor: "white"
         });
