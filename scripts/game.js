@@ -279,7 +279,12 @@ var GameState = {
 
             } else {
                 errors++;
-                wrongLetters += letter;
+                if (wrongLetters.length == 0) {
+                    wrongLetters += letter;
+                } else {
+                    wrongLetters += ", " + letter;
+                }
+
                 guessedLetters.destroy();
                 guessedLetters = this.game.add.text(0, constants.wrongLettersCoordintates, constants.wrongLettersText + wrongLetters, { fontSize: constants.smallText });
                 drawArray[errors]();
