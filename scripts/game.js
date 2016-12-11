@@ -115,26 +115,9 @@ var GameState = {
                 input.remove();
 
                 if (word.toUpperCase() == wordToSearch) {
-                    stats.guessedWords++;
-                    stats.playedGames++;
-                    stats.wonGames++;
-                    game.state.states.GameState.revealWord();
-
-                    var win = this.game.add.text(game.world.centerX, constants.resultTextCoordinate, constants.youWinText, {
-                        fontSize: constants.bigText, backgroundColor: constants.whiteColor
-                    });
-
-                    win.anchor.x = 0.5;
-                    game.state.states.GameState.addNewGameButton(constants.newGameText);
+                    this.winGame();
                 } else {
-                    stats.playedGames++;
-                    stats.lostGames++;
-                    var lose = this.game.add.text(game.world.centerX, constants.resultTextCoordinate, constants.youLoseText, {
-                        fontSize: constants.bigText, backgroundColor: constants.whiteColor
-                    });
-
-                    lose.anchor.x = 0.5;
-                    game.state.states.GameState.addNewGameButton(constants.newGameText);
+                    this.loseGame();
                 }
             }
         };
@@ -199,6 +182,30 @@ var GameState = {
         }
     },
 
+    winGame: function () {
+        stats.playedGames++;
+        stats.wonGames++;
+        this.destroyGuessButton();
+        this.destroyAlphabetButtons();
+
+        var win = this.game.add.text(game.world.centerX, constants.resultTextCoordinate, constants.youWinText, {
+            fontSize: constants.bigText, backgroundColor: constants.whiteColor
+        });
+        win.anchor.x = 0.5;
+        this.addNewGameButton(constants.newGameText);
+    },
+
+    loseGame: function () {
+        stats.playedGames++;
+        stats.lostGames++;
+        var lose = this.game.add.text(game.world.centerX, constants.resultTextCoordinate, constants.youLoseText, {
+            fontSize: constants.bigText, backgroundColor: constants.whiteColor
+        });
+
+        lose.anchor.x = 0.5;
+        game.state.states.GameState.addNewGameButton(constants.newGameText);
+    },
+
     revealWord: function () {
         var wordLength = wordToSearch.length;
         for (var i = 0; i < wordLength; i++) {
@@ -238,16 +245,7 @@ var GameState = {
                 this.updateWord();
 
                 if (wordArray.indexOf("_") < 0) {
-                    stats.playedGames++;
-                    stats.wonGames++;
-                    game.state.states.GameState.destroyGuessButton();
-                    game.state.states.GameState.destroyAlphabetButtons();
-
-                    var win = this.game.add.text(game.world.centerX, constants.resultTextCoordinate, constants.youWinText, {
-                        fontSize: constants.bigText, backgroundColor: constants.whiteColor
-                    });
-                    win.anchor.x = 0.5;
-                    this.addNewGameButton(constants.newGameText);
+                    this.winGame();
                 }
 
             } else {
@@ -260,16 +258,7 @@ var GameState = {
                 this.hangingMan.anchor.x = 0.5;
 
                 if (errors == constants.maxErrors) {
-                    stats.playedGames++;
-                    stats.lostGames++;
-                    game.state.states.GameState.destroyGuessButton();
-                    game.state.states.GameState.destroyAlphabetButtons();
-
-                    var lose = this.game.add.text(game.world.centerX, constants.resultTextCoordinate, constants.youLoseText, {
-                        fontSize: constants.bigText, backgroundColor: constants.whiteColor
-                    });
-                    lose.anchor.x = 0.5;
-                    this.addNewGameButton(constants.newGameText);
+                    this.loseGame();
                 }
             }
         }
