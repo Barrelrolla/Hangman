@@ -115,9 +115,9 @@ var GameState = {
                 input.remove();
 
                 if (word.toUpperCase() == wordToSearch) {
-                    this.winGame();
+                    game.state.states.GameState.winGame();
                 } else {
-                    this.loseGame();
+                    game.state.states.GameState.loseGame();
                 }
             }
         };
