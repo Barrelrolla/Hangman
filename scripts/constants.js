@@ -1,6 +1,7 @@
 var constants = {
     gameName: "HANGMAN",
-    whiteColor: "#ffffff",
+    whiteColor: 0xffffff,
+    blackColor: 0x000000,
     menuCategoriesName: "Select category:",
     buttonImageName: "button",
     bigText: 30,

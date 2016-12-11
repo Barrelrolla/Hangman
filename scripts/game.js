@@ -21,12 +21,12 @@ var alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
 
 var GameState = {
     preload: function () {
-        this.load.image("hangingMan0", "assets/images/0.png");
-        this.load.image("hangingMan1", "assets/images/1.png");
-        this.load.image("hangingMan2", "assets/images/2.png");
-        this.load.image("hangingMan3", "assets/images/3.png");
-        this.load.image("hangingMan4", "assets/images/4.png");
-        this.load.image("hangingMan5", "assets/images/5.png");
+        // this.load.image("hangingMan0", "assets/images/0.png");
+        // this.load.image("hangingMan1", "assets/images/1.png");
+        // this.load.image("hangingMan2", "assets/images/2.png");
+        // this.load.image("hangingMan3", "assets/images/3.png");
+        // this.load.image("hangingMan4", "assets/images/4.png");
+        // this.load.image("hangingMan5", "assets/images/5.png");
         this.load.image(constants.buttonImageName, "assets/images/button.png");
 
     },
@@ -54,8 +54,8 @@ var GameState = {
         guessedLetters = this.game.add.text(0, constants.wrongLettersCoordintates, constants.wrongLettersText + wrongLetters, { fontSize: constants.smallText });
         message = this.game.add.text();
         message.anchor.x = 0.5;
-        this.hangingMan = this.game.add.sprite(game.world.centerX, 0, "hangingMan0");
-        this.hangingMan.anchor.x = 0.5;
+        // this.hangingMan = this.game.add.sprite(game.world.centerX, 0, "hangingMan0");
+        // this.hangingMan.anchor.x = 0.5;
         this.game.input.keyboard.enabled = true;
         this.game.input.keyboard.onDownCallback = function (e) {
             if (e.keyCode >= constants.aKey && e.keyCode <= constants.zKey) {
@@ -63,6 +63,8 @@ var GameState = {
                 game.state.states.GameState.checkMatch(letter);
             }
         };
+
+        drawInitalState();
 
         displayedWord = this.game.add.text(game.world.centerX, constants.displayedWordCoordinate, wordArray.join(" "));
         displayedWord.anchor.x = 0.5;
@@ -187,9 +189,10 @@ var GameState = {
         stats.wonGames++;
         this.destroyGuessButton();
         this.destroyAlphabetButtons();
+        drawHappyFace();
 
         var win = this.game.add.text(game.world.centerX, constants.resultTextCoordinate, constants.youWinText, {
-            fontSize: constants.bigText, backgroundColor: constants.whiteColor
+            fontSize: constants.bigText, backgroundColor: "white"
         });
         win.anchor.x = 0.5;
         this.addNewGameButton(constants.newGameText);
@@ -198,8 +201,11 @@ var GameState = {
     loseGame: function () {
         stats.playedGames++;
         stats.lostGames++;
+        this.destroyGuessButton();
+        this.destroyAlphabetButtons();
+
         var lose = this.game.add.text(game.world.centerX, constants.resultTextCoordinate, constants.youLoseText, {
-            fontSize: constants.bigText, backgroundColor: constants.whiteColor
+            fontSize: constants.bigText, backgroundColor: "white"
         });
 
         lose.anchor.x = 0.5;
@@ -253,9 +259,10 @@ var GameState = {
                 wrongLetters += letter;
                 guessedLetters.destroy();
                 guessedLetters = this.game.add.text(0, constants.wrongLettersCoordintates, constants.wrongLettersText + wrongLetters, { fontSize: constants.smallText });
-                this.hangingMan.destroy();
-                this.hangingMan = this.game.add.sprite(game.world.centerX, 0, "hangingMan" + errors);
-                this.hangingMan.anchor.x = 0.5;
+                drawArray[errors]();
+                // this.hangingMan.destroy();
+                // this.hangingMan = this.game.add.sprite(game.world.centerX, 0, "hangingMan" + errors);
+                // this.hangingMan.anchor.x = 0.5;
 
                 if (errors == constants.maxErrors) {
                     this.loseGame();
@@ -264,3 +271,84 @@ var GameState = {
         }
     }
 };
+
+var drawInitalState = function () {
+    var graphics = game.add.graphics(0, 0);
+    graphics.lineStyle(4, constants.blackColor);
+    graphics.moveTo(370, 220);
+    graphics.lineTo(370, 40);
+    graphics.lineTo(300, 40);
+    graphics.lineTo(300, 70);
+    graphics.drawCircle(300, 95, 50);
+    graphics.beginFill(constants.blackColor);
+    graphics.drawCircle(310, 88, 4);
+    graphics.drawCircle(290, 88, 4);
+    graphics.endFill();
+    graphics.moveTo(290, 110);
+    graphics.lineTo(315, 100);
+};
+
+var drawBody = function () {
+    var graphics = game.add.graphics(0, 0);
+    graphics.lineStyle(4, constants.blackColor);
+    graphics.moveTo(300, 120);
+    graphics.lineTo(300, 190);
+};
+
+var drawLeftHand = function () {
+    var graphics = game.add.graphics(0, 0);
+    graphics.lineStyle(4, constants.blackColor);
+    graphics.moveTo(300, 135);
+    graphics.lineTo(260, 165);
+};
+
+var drawRightHand = function () {
+    var graphics = game.add.graphics(0, 0);
+    graphics.lineStyle(4, constants.blackColor);
+    graphics.moveTo(300, 135);
+    graphics.lineTo(340, 165);
+};
+
+var drawLeftLeg = function () {
+    var graphics = game.add.graphics(0, 0);
+    graphics.lineStyle(4, constants.blackColor);
+    graphics.moveTo(300, 190);
+    graphics.lineTo(255, 225);
+};
+
+var drawRightLeg = function () {
+    var graphics = game.add.graphics(0, 0);
+    graphics.lineStyle(4, constants.blackColor);
+    graphics.moveTo(300, 190);
+    graphics.lineTo(345, 225);
+    drawXeyes();
+};
+
+var drawXeyes = function () {
+    var graphics = game.add.graphics(0, 0);
+    graphics.lineStyle(4, constants.whiteColor);
+    graphics.beginFill(constants.whiteColor);
+    graphics.drawCircle(310, 88, 4);
+    graphics.drawCircle(290, 88, 4);
+    graphics.endFill();
+    graphics.lineStyle(4, constants.blackColor);
+    graphics.moveTo(285, 84);
+    graphics.lineTo(295, 94);
+    graphics.moveTo(295, 84);
+    graphics.lineTo(285, 94);
+    graphics.moveTo(305, 84);
+    graphics.lineTo(315, 94);
+    graphics.moveTo(315, 84);
+    graphics.lineTo(305, 94);
+};
+
+var drawHappyFace = function () {
+    var graphics = game.add.graphics(0, 0);
+    graphics.lineStyle(4, constants.whiteColor);
+    graphics.moveTo(290, 110);
+    graphics.lineTo(315, 100);
+    graphics.lineStyle(4, constants.blackColor);    
+    graphics.arc(300, 100, 10, 0, Math.PI)
+};
+
+var drawArray = [drawInitalState, drawBody, drawLeftHand, drawRightHand, drawLeftLeg, drawRightLeg];
