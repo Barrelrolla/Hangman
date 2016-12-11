@@ -9,6 +9,8 @@ var alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
     letter,
     buttonText,
     message,
+    guessButton,
+    guessButtonText,
     lettersStat,
     guessedLetters,
     triedLetters,
@@ -35,7 +37,8 @@ var GameState = {
         this.game.add.text(0, 0, constants.playedGamesText + stats.playedGames, { fontSize: constants.smallText });
         this.game.add.text(0, constants.wonGamesCoordinate, constants.wonGamesText + stats.wonGames, { fontSize: constants.smallText });
         this.game.add.text(0, constants.lostGamesCoordinate, constants.lostGamesText + stats.lostGames, { fontSize: constants.smallText });
-        button = this.game.add.button(constants.guessWordX, constants.guessWordY, constants.buttonImageName, function () {
+        guessButton = this.game.add.button(constants.guessWordX, constants.guessWordY, constants.buttonImageName, function () {
+            game.state.states.GameState.destroyGuessButton();
             var container = document.getElementById("container");
             var input = document.createElement("input");
             input.setAttribute("type", "text");
@@ -52,9 +55,12 @@ var GameState = {
                         stats.guessedWords++;
                         stats.playedGames++;
                         stats.wonGames++;
+                        game.state.states.GameState.revealWord();
+
                         var win = this.game.add.text(game.world.centerX, constants.resultTextCoordinate, constants.youWinText, {
                             fontSize: constants.bigText, backgroundColor: constants.whiteColor
                         });
+
                         win.anchor.x = 0.5;
                         game.state.states.GameState.addButton(constants.newGameText);
                     } else {
@@ -63,16 +69,17 @@ var GameState = {
                         var lose = this.game.add.text(game.world.centerX, constants.resultTextCoordinate, constants.youLoseText, {
                             fontSize: constants.bigText, backgroundColor: constants.whiteColor
                         });
+
                         lose.anchor.x = 0.5;
                         game.state.states.GameState.addButton(constants.newGameText);
                     }
                 }
             };
         });
-        button.scale.setTo(0.6, 1);
-        button.anchor.x = 0.5;
-        buttonText = this.game.add.text(constants.guessWordX, constants.guessWordY + constants.buttonTextModifier, constants.guessWordText);
-        buttonText.anchor.x = 0.5;
+        guessButton.scale.setTo(0.6, 1);
+        guessButton.anchor.x = 0.5;
+        guessButtonText = this.game.add.text(constants.guessWordX, constants.guessWordY + constants.buttonTextModifier, constants.guessWordText);
+        guessButtonText.anchor.x = 0.5;
         lettersStat = this.game.add.text(0, constants.guessedLettersCoordinate, constants.guessedLettersText + stats.guessedLetters, { fontSize: constants.smallText });
         this.game.add.text(0, constants.guessedWordsCoordinate, constants.guessedWordsText + stats.guessedWords, { fontSize: constants.smallText });
         guessedLetters = this.game.add.text(0, constants.wrongLettersCoordintates, constants.wrongLettersText + wrongLetters, { fontSize: constants.smallText });
@@ -139,6 +146,25 @@ var GameState = {
         this.game.state.start(constants.menuStateName);
     },
 
+    destroyGuessButton: function () {
+        guessButton.destroy();
+        guessButtonText.destroy();
+    },
+
+    revealWord: function () {
+        var wordLength = wordToSearch.length;
+        for (var i = 0; i < wordLength; i++) {
+            wordArray[i] = wordToSearch.charAt(i);
+        }
+        this.updateWord();
+    },
+
+    updateWord: function() {
+        displayedWord.destroy();
+        displayedWord = this.game.add.text(game.world.centerX, constants.displayedWordCoordinate, wordArray.join(" "));
+        displayedWord.anchor.x = 0.5;
+    },
+
     checkMatch: function (letter) {
         if (triedLetters.indexOf(letter) >= 0) {
             message.destroy();
@@ -161,13 +187,13 @@ var GameState = {
                 lettersStat.destroy();
                 lettersStat = this.game.add.text(0, constants.guessedLettersCoordinate, constants.guessedLettersText + stats.guessedLetters, { fontSize: constants.smallText });
 
-                displayedWord.destroy();
-                displayedWord = this.game.add.text(game.world.centerX, constants.displayedWordCoordinate, wordArray.join(" "));
-                displayedWord.anchor.x = 0.5;
+                this.updateWord();
 
                 if (wordArray.indexOf("_") < 0) {
                     stats.playedGames++;
                     stats.wonGames++;
+                    game.state.states.GameState.destroyGuessButton();
+
                     var win = this.game.add.text(game.world.centerX, constants.resultTextCoordinate, constants.youWinText, {
                         fontSize: constants.bigText, backgroundColor: constants.whiteColor
                     });
@@ -187,6 +213,8 @@ var GameState = {
                 if (errors == constants.maxErrors) {
                     stats.playedGames++;
                     stats.lostGames++;
+                    game.state.states.GameState.destroyGuessButton();
+
                     var lose = this.game.add.text(game.world.centerX, constants.resultTextCoordinate, constants.youLoseText, {
                         fontSize: constants.bigText, backgroundColor: constants.whiteColor
                     });
