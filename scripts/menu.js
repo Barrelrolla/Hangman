@@ -1,26 +1,26 @@
 var MenuState = {
     preload: function () {
-        this.load.image("button", "assets/images/button.png");
+        this.load.image(constants.buttonImageName, "assets/images/button.png");
     },
     create: function () {
-        var coord = 80;
+        var coord = constants.firstMenuButton;
         var text;
-        this.game.stage.backgroundColor = "#ffffff";
-        text = this.game.add.text(game.world.centerX, 0, "HANGMAN", { fontSize: 30 });
+        this.game.stage.backgroundColor = constants.whiteColor;
+        text = this.game.add.text(game.world.centerX, 0, constants.gameName, { fontSize: constants.bigText });
         text.anchor.x = 0.5;
-        text = this.game.add.text(game.world.centerX, 40, "Select category:");
+        text = this.game.add.text(game.world.centerX, constants.menuCategoryCoordinate, constants.menuCategoriesName);
         text.anchor.x = 0.5;
         for (var cat in categories) {
             var length = categories[cat].words.length;
             var rng = Math.floor((Math.random() * length));
-            var button = this.game.add.button(game.world.centerX, coord, "button");
+            var button = this.game.add.button(game.world.centerX, coord, constants.buttonImageName);
             button.anchor.x = 0.5;
             button.variable = categories[cat].words[rng];
             button.inputEnabled = true;
             button.events.onInputDown.add(this.gameStart, this);
-            text = this.game.add.text(game.world.centerX, coord + 5, categories[cat].name);
+            text = this.game.add.text(game.world.centerX, coord + constants.buttonTextModifier, categories[cat].name);
             text.anchor.x = 0.5;
-            coord += 50;
+            coord += constants.buttonModifier;
         }
     },
     update: function () {
@@ -28,6 +28,6 @@ var MenuState = {
     },
     gameStart: function (button) {
         var word = button.variable;
-        this.game.state.start("GameState", true, false, word);
+        this.game.state.start(constants.gameStateName, true, false, word);
     }
 };
