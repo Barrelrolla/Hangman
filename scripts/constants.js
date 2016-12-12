@@ -47,4 +47,4 @@ var constants = {
     alphabetButtonModifier: 30,
     alphabetButtonTextModifier: 4,
     alphabetRowModifier: 5
-}
+};

@@ -1,4 +1,5 @@
 var alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"],
+    drawArray = [drawInitalState, drawBody, drawLeftHand, drawRightHand, drawLeftLeg, drawRightLeg],    
     alphabetButtonArray,
     alphabetTextArray,
     wordToSearch = "",
@@ -65,7 +66,7 @@ var GameState = {
             if (e.keyCode >= constants.aKey && e.keyCode <= constants.zKey) {
                 letter = String.fromCharCode(e.keyCode);
                 game.state.states.GameState.checkMatch(letter);
-            }
+            };
         };
 
         drawInitalState();
@@ -93,7 +94,7 @@ var GameState = {
         for (let i = 0; i < words.length; i++) {
             if (i > 0) {
                 wordArray.push(" ");
-            }
+            };
 
             word = words[i].toUpperCase();
             length = word.length;
@@ -129,8 +130,8 @@ var GameState = {
                     game.state.states.GameState.winGame();
                 } else {
                     game.state.states.GameState.loseGame();
-                }
-            }
+                };
+            };
         };
     },
 
@@ -156,8 +157,8 @@ var GameState = {
             if (i % constants.alphabetRowModifier === 0 && i > 0) {
                 y += constants.alphabetButtonModifier;
                 x = constants.alphabetButtonsX;
-            }
-        }
+            };
+        };
     },
 
     addNewGameButton: function (text) {
@@ -169,7 +170,7 @@ var GameState = {
         this.game.input.keyboard.onDownCallback = function (e) {
             if (e.keyCode == constants.enterKey) {
                 game.state.states.GameState.newGame();
-            }
+            };
         };
     },
 
@@ -188,7 +189,7 @@ var GameState = {
             // alphabetButtonArray[i].onInputUp = alphabetButtonArray[i].onInputDown;
             alphabetButtonArray[i].destroy();
             alphabetTextArray[i].destroy();
-        }
+        };
     },
 
     winGame: function () {
@@ -225,7 +226,7 @@ var GameState = {
 
         for (errors ; errors <= constants.maxErrors; errors++) {
             drawArray[errors]();            
-        }
+        };
 
         var lose = this.game.add.text(game.world.centerX, constants.resultTextCoordinate, constants.youLoseText, {
             fontSize: constants.bigText, backgroundColor: "white"
@@ -265,7 +266,7 @@ var GameState = {
                 while (index >= 0) {
                     wordArray[index] = wordToSearch.charAt(index);
                     index = wordToSearch.indexOf(letter, index + 1);
-                }
+                };
 
                 stats.guessedLetters++;
                 lettersStat.destroy();
@@ -275,7 +276,7 @@ var GameState = {
 
                 if (wordArray.indexOf("_") < 0) {
                     this.winGame();
-                }
+                };
 
             } else {
                 errors++;
@@ -283,7 +284,7 @@ var GameState = {
                     wrongLetters += letter;
                 } else {
                     wrongLetters += ", " + letter;
-                }
+                };
 
                 guessedLetters.destroy();
                 guessedLetters = this.game.add.text(0, constants.wrongLettersCoordintates, constants.wrongLettersText + wrongLetters, { fontSize: constants.smallText });
@@ -294,89 +295,8 @@ var GameState = {
 
                 if (errors == constants.maxErrors) {
                     this.loseGame();
-                }
-            }
-        }
+                };
+            };
+        };
     }
 };
-
-var drawInitalState = function () {
-    var graphics = game.add.graphics(0, 0);
-    graphics.lineStyle(4, constants.blackColor);
-    graphics.moveTo(370, 220);
-    graphics.lineTo(370, 40);
-    graphics.lineTo(300, 40);
-    graphics.lineTo(300, 70);
-    graphics.drawCircle(300, 95, 50);
-    graphics.beginFill(constants.blackColor);
-    graphics.drawCircle(310, 88, 4);
-    graphics.drawCircle(290, 88, 4);
-    graphics.endFill();
-    graphics.moveTo(290, 110);
-    graphics.lineTo(315, 100);
-};
-
-var drawBody = function () {
-    var graphics = game.add.graphics(0, 0);
-    graphics.lineStyle(4, constants.blackColor);
-    graphics.moveTo(300, 120);
-    graphics.lineTo(300, 190);
-};
-
-var drawLeftHand = function () {
-    var graphics = game.add.graphics(0, 0);
-    graphics.lineStyle(4, constants.blackColor);
-    graphics.moveTo(300, 135);
-    graphics.lineTo(260, 165);
-};
-
-var drawRightHand = function () {
-    var graphics = game.add.graphics(0, 0);
-    graphics.lineStyle(4, constants.blackColor);
-    graphics.moveTo(300, 135);
-    graphics.lineTo(340, 165);
-};
-
-var drawLeftLeg = function () {
-    var graphics = game.add.graphics(0, 0);
-    graphics.lineStyle(4, constants.blackColor);
-    graphics.moveTo(300, 190);
-    graphics.lineTo(255, 225);
-};
-
-var drawRightLeg = function () {
-    var graphics = game.add.graphics(0, 0);
-    graphics.lineStyle(4, constants.blackColor);
-    graphics.moveTo(300, 190);
-    graphics.lineTo(345, 225);
-    drawXeyes();
-};
-
-var drawXeyes = function () {
-    var graphics = game.add.graphics(0, 0);
-    graphics.lineStyle(4, constants.whiteColor);
-    graphics.beginFill(constants.whiteColor);
-    graphics.drawCircle(310, 88, 4);
-    graphics.drawCircle(290, 88, 4);
-    graphics.endFill();
-    graphics.lineStyle(4, constants.blackColor);
-    graphics.moveTo(285, 84);
-    graphics.lineTo(295, 94);
-    graphics.moveTo(295, 84);
-    graphics.lineTo(285, 94);
-    graphics.moveTo(305, 84);
-    graphics.lineTo(315, 94);
-    graphics.moveTo(315, 84);
-    graphics.lineTo(305, 94);
-};
-
-var drawHappyFace = function () {
-    var graphics = game.add.graphics(0, 0);
-    graphics.lineStyle(4, constants.whiteColor);
-    graphics.moveTo(290, 110);
-    graphics.lineTo(315, 100);
-    graphics.lineStyle(4, constants.blackColor);    
-    graphics.arc(300, 100, 10, 0, Math.PI)
-};
-
-var drawArray = [drawInitalState, drawBody, drawLeftHand, drawRightHand, drawLeftLeg, drawRightLeg];

@@ -2,6 +2,7 @@ var MenuState = {
     preload: function () {
         this.load.image(constants.buttonImageName, "assets/images/button.png");
     },
+    
     create: function () {
         var coord = constants.firstMenuButton;
         var text;
