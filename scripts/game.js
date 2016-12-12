@@ -26,6 +26,7 @@ var alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
 
 var GameState = {
     preload: function () {
+        // first version with images instead of drawin, all code using this is commented instead of deleted
         // this.load.image("hangingMan0", "assets/images/0.png");
         // this.load.image("hangingMan1", "assets/images/1.png");
         // this.load.image("hangingMan2", "assets/images/2.png");
