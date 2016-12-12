@@ -42,7 +42,7 @@ var GameState = {
         wrongLetters = "";
         alphabetButtonArray = [];
         alphabetTextArray = [];
-        stats = JSON.parse(localStorage.getItem(constants.localStorageStatsName)) || stats;
+        this.loadStats();
         this.game.stage.backgroundColor = constants.whiteColor;
         playedStat = this.game.add.text(0, 0, constants.playedGamesText + stats.playedGames, { fontSize: constants.smallText });
         wonStat = this.game.add.text(0, constants.wonGamesCoordinate, constants.wonGamesText + stats.wonGames, { fontSize: constants.smallText });
@@ -199,7 +199,7 @@ var GameState = {
         stats.wonGames++;
         wonStat.destroy();
         wonStat = this.game.add.text(0, constants.wonGamesCoordinate, constants.wonGamesText + stats.wonGames, { fontSize: constants.smallText });
-        localStorage.setItem(constants.localStorageStatsName, JSON.stringify(stats));
+        this.saveStats();
 
         this.destroyGuessButton();
         this.destroyAlphabetButtons();
@@ -219,7 +219,7 @@ var GameState = {
         stats.lostGames++;
         lostStat.destroy();
         lostStat = this.game.add.text(0, constants.lostGamesCoordinate, constants.lostGamesText + stats.lostGames, { fontSize: constants.smallText });
-        localStorage.setItem(constants.localStorageStatsName, JSON.stringify(stats));
+        this.saveStats();
 
         this.destroyGuessButton();
         this.destroyAlphabetButtons();
@@ -298,5 +298,13 @@ var GameState = {
                 };
             };
         };
+    },
+
+    saveStats: function () {
+        localStorage.setItem(constants.localStorageStatsName, JSON.stringify(stats));
+    },
+
+    loadStats: function () {
+        stats = JSON.parse(localStorage.getItem(constants.localStorageStatsName)) || stats;
     }
 };
