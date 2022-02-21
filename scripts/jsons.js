@@ -44,27 +44,27 @@ var categories = {
                 "word": "Destiny",
                 "description": "An FPSMMO made by Bungie"
             },
-            {
-                "word": "Counter Strike",
-                "description": "One of the largest e-sports"
-            }
+            // {
+            //     "word": "Counter Strike",
+            //     "description": "One of the largest e-sports"
+            // }
         ]
     },
-    "food": {
-        "name": "Food",        
-        "words": [
-            {
-                "word": "Baked beans",
-                "description": "Dish with something like seeds"
-            },
-            {
-                "word": "Spaghetti",
-                "description": "Italian food"
-            },
-            {
-                "word": "White rice",
-                "description": "Very popular food in the East"
-            }
-        ]
-    }
+    // "food": {
+    //     "name": "Food",        
+    //     "words": [
+    //         {
+    //             "word": "Baked beans",
+    //             "description": "Dish with something like seeds"
+    //         },
+    //         {
+    //             "word": "Spaghetti",
+    //             "description": "Italian food"
+    //         },
+    //         {
+    //             "word": "White rice",
+    //             "description": "Very popular food in the East"
+    //         }
+    //     ]
+    // }
 };
